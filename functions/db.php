@@ -1,5 +1,6 @@
 <?php
 	$con = mysqli_connect('localhost','root','','bookshare');
+	// $con = mysqli_connect('localhost','bartabahok24_mahbub','bookshare@mahbub','bartabahok24_bookshare');
 
 	function row_count($result){
 		return mysqli_num_rows($result);

@@ -88,10 +88,10 @@
                      <!-- Advertizing -->
                      <div class="col-md-12 col-xs-12 col-sm-12">
                         <section class="advertising">
-                           <a href="post-ad-1.php">
+                           <a href="postad.php">
                               <div class="banner">
                                  <div class="wrapper">
-                                    <span class="title">Do you want your property to be listed here?</span>
+                                    <span class="title">Do you want your book to be listed here?</span>
                                     <span class="submit">Submit it now! <i class="fa fa-plus-square"></i></span>
                                  </div>
                               </div>

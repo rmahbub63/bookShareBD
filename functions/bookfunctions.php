@@ -606,7 +606,7 @@ $books = <<<DELIMETER
               <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star-o"></i> <span class="rating-count">(2)</span>
 
            </div>
-           <!-- Price --><span class="ad-price">$370</span> 
+           <!-- Price --><span class="ad-price">BDT {$price} {$extra} {$rent_type}</span> 
         </div>
         <!-- Ad Meta Stats -->
         <div class="ad-info-1">
@@ -676,11 +676,11 @@ $books = <<<DELIMETER
        <!-- Ad Desc -->     
        <div class="ad-archive-desc">
           <!-- Price -->    
-          <div class="ad-price">$500</div>
+          <div class="ad-price">BDT {$price} {$extra} {$rent_type}</div>
           <!-- Title -->    
           <h3><a href="single-page-listing.php?adno={$adno}"> {$row['title']} </a></h3>
           <!-- Category -->
-          <div class="category-title"> <span><a href="#">Car & Bikes</a></span> </div>
+          <div class="category-title"> <span><a href="category-listing.php?category={$row['category']}&sub={$row['sub_category']}">{$row['sub_category']}</a></span> </div>
           <!-- Short Description -->
           <div class="clearfix visible-xs-block"></div>
           <!-- Ad Features -->
@@ -782,13 +782,12 @@ if(!strcasecmp($row['adtype'],"Rent")){
 $books = <<<DELIMETER
  <div class="ads-list-archive">
     <!-- Image Block -->
-    <div class="col-lg-5 col-md-5 col-sm-5 no-padding">
+    <div class="col-lg-3 col-md-5 col-sm-5 no-padding">
        <!-- Img Block -->
-       <div class="ad-archive-img">
+       <div class="ad-archive-img" style="width: auto; height: 225px; align-content: center; margin-left: auto;
+  margin-right: auto;>
           <a href="#">
-             <div class="ribbon popular"></div>
-             <img class="img-responsive" src="{$image_path}" alt="" style="width: auto; height: 125px; align-content: center; margin-left: auto;
-  margin-right: auto;> 
+             <img class="img-responsive" src="{$image_path}" alt="" > 
           </a>
        </div>
        <!-- Img Block -->
@@ -796,15 +795,15 @@ $books = <<<DELIMETER
     <!-- Ads Listing -->
     <div class="clearfix visible-xs-block"></div>
     <!-- Content Block -->
-    <div class="col-lg-7 col-md-7 col-sm-7 no-padding">
+    <div class="col-lg-9 col-md-7 col-sm-7 no-padding">
        <!-- Ad Desc -->
        <div class="ad-archive-desc">
           <!-- Price -->
-          <div class="ad-price">$38,000</div>
+          <div class="ad-price">BDT {$price} {$extra} {$rent_type}</div>
           <!-- Title -->
           <h3>{$row['title']}</h3>
           <!-- Category -->
-          <div class="category-title"> <span><a href="#">Car & Bikes</a></span> </div>
+          <div class="category-title"> <span><a href="category-listing.php?category={$row['category']}&sub={$row['sub_category']}">{$row['sub_category']}</a></span> </div>
           <!-- Short Description -->
           <div class="clearfix visible-xs-block"></div>
           <p class="hidden-sm">Lorem ipsum dolor sit amet, quem convenire interesset ut vix, maiestatis inciderint no, eos in elit dicat.....</p>
@@ -850,7 +849,7 @@ $books = <<<DELIMETER
           <!-- Ad History -->
           <div class="clearfix archive-history">
              <div class="last-updated">Last Updated: 1 day ago</div>
-             <div class="ad-meta"> <a class="btn save-ad"><i class="fa fa-heart-o"></i> Save Ad.</a> <a class="btn btn-success"><i class="fa fa-phone"></i> View Details.</a> </div>
+             <div class="ad-meta"> <a class="btn btn-success"><i class="fa fa-eye"></i> View Details</a> </div>
           </div>
        </div>
        <!-- Ad Desc End -->
@@ -860,8 +859,75 @@ $books = <<<DELIMETER
 DELIMETER;
 echo $books;
 }
+}
 
 
+
+
+/************* Get recent adds of book *********/
+function get_all__recent_books(){
+$query = query("SELECT * FROM bookads order by adno DESC LIMIT 4");
+confirm($query);
+while($row = fetch_array($query)) {
+  // short description
+$adno = $row['adno'];
+// for getting the book for loggedin user and normal user
+$image_path = $row['ad_image'];
+if(!logged_in_check()){
+  $image_path = "admin/".$row['ad_image'];
+}
+$description = strip_tags($row['book_description']);
+if (strlen($description) > 230) {
+    // truncate string
+    $stringCut = substr($description, 0, 230);
+    $endPoint = strrpos($stringCut, ' ');
+
+    //if the string doesn't contain any space then it will cut without word basis.
+    $description = $endPoint? substr($stringCut, 0, $endPoint):substr($stringCut, 0);
+    $description .= '... <a href="single-page-listing.php?adno='.$adno.'">Read More</a>';
+}
+if(!strcasecmp($row['adtype'],"Rent")){
+  $price = $row['rent_price'];
+  $rent_type = $row['rent_type'];
+  $security_money = $row['security_money'];
+  $security_money = $row['orginal_price'];
+  $extra = '/';
+} else{
+  $price = $row['selling_price'];
+  $rent_type = '';
+  $security_money = '';
+  $security_money = '';
+  $extra = '';
+}
+
+$books = <<<DELIMETER
+ <div class="recent-ads-list">
+    <div class="recent-ads-container">
+       <div class="recent-ads-list-image">
+          <a href="#" class="recent-ads-list-image-inner">
+             <img src="$image_path" alt="" >
+          </a><!-- /.recent-ads-list-image-inner -->
+       </div>
+       <!-- /.recent-ads-list-image -->
+       <div class="recent-ads-list-content">
+          <h3 class="recent-ads-list-title">
+             <a href="single-page-listing.php?adno={$row['adno']}">{$row['title']}</a>
+          </h3>
+          <ul class="recent-ads-list-location">
+             <li><a href="#">{$row['sub_category']}</a></li>
+          </ul>
+          <div class="recent-ads-list-price">
+             $ 20,000
+          </div>
+          <!-- /.recent-ads-list-price -->
+       </div>
+       <!-- /.recent-ads-list-content -->
+    </div>
+    <!-- /.recent-ads-container -->
+ </div>
+DELIMETER;
+echo $books;
+}
 }
 
 

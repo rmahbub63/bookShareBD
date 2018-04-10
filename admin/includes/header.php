@@ -82,6 +82,7 @@
                                     <li><a href="category-listing.php?category=Academics&sub=Physics">Physics</a></li>
                                     <li><a href="category-listing.php">Chemistry</a></li>
                                     <li><a href="category-listing.php">Math</a></li>
+                                    <li><a href="category-listing.php?category=Academics&sub=Science & Technology">Science & Technology</a></li>
                                  </ul>
                               </li>
                               <li>
